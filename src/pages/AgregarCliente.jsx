@@ -18,7 +18,7 @@ class AgregarCliente extends React.Component{
 
     componentDidMount(){
         if (this.state.tipo === 'editar'){
-            axios.get("http://127.0.0.1:8000/discoteca/"+this.state.discoteca+"/clientes/"+this.state.dniCliente)
+            axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+this.state.dniCliente)
             .then(data =>{
                 this.setState({nombre: data.data.nombre});
                 this.setState({edad: data.data.edad});
@@ -38,7 +38,7 @@ class AgregarCliente extends React.Component{
             edad: this.state.edad
             
         }
-        axios.post('http://127.0.0.1:8000/discoteca/'+this.state.discoteca +'/clientes', data)
+        axios.post('http://jahirlarico.enarequipa.org:8000/discoteca/'+this.state.discoteca +'/clientes', data)
         .then(res =>{
             console.log(data)
             window.location.href = "/";
@@ -59,7 +59,7 @@ class AgregarCliente extends React.Component{
             edad: this.state.edad
             
         }
-        axios.put("http://127.0.0.1:8000/discoteca/"+this.state.discoteca+"/clientes/"+this.state.dniCliente, data)
+        axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+this.state.dniCliente, data)
         window.location.href = '/'
         
     }

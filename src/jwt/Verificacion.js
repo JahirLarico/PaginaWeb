@@ -3,7 +3,7 @@ import axios from 'axios';
 //const api_url = "http://jahirlarico.enarequipa.org:8000/";
 
 //Declarando la url base 
-const api_url = "http://localhost:8000/";
+const api_url = "http://jahirlarico.enarequipa.org:8000/";
 class Verificacion{
     login (usuario, password){
         return axios.post(api_url+ "login",{

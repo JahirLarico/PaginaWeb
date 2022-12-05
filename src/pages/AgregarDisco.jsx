@@ -36,7 +36,7 @@ class AgregarDisco extends React.Component{
             UbicacionDiscoteca: this.state.ubicacionDisco,
             password: this.state.password
         }
-        axios.post("http://localhost:8000/discoteca", data)
+        axios.post("http://jahirlarico.enarequipa.org:8000/discoteca", data)
         .then((res) => {
           
             const seguridad = {
@@ -44,7 +44,7 @@ class AgregarDisco extends React.Component{
                 UbicacionDiscoteca: res.data.UbicacionDiscoteca,
                 password: res.data.password,
             }
-            axios.put("http://localhost:8000/discoteca/"+ this.state.nombreDisco, seguridad)
+            axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+ this.state.nombreDisco, seguridad)
             window.location.href = "/login";
         })
     }

@@ -16,7 +16,7 @@ class Historial extends React.Component{
         errorMessage : ''
     }
     buscar = () => {
-        axios.get("http://127.0.0.1:8000/discoteca/"+this.state.nombreDisco+"/clientes/"+this.state.dniBuscado+"/historial")
+        axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.nombreDisco+"/clientes/"+this.state.dniBuscado+"/historial")
         .then(res => {
             this.setState({data:res.data});
             this.setState({ dniBuscado : ''});

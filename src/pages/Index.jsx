@@ -8,82 +8,6 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Table from 'react-bootstrap/Table';
 
- /*
-function logout(){
-    Verificacion.destroyToken();
-    window.location.reload();
-}
-
-const data = () => {
-  const res = axios.get("http://jahirlarico.enarequipa.org:8000//usuarioDetail?nombreUsuario=admin")
-  console.log(res.data)
-  return res.data;
-}
-function App(){
-
-  const state = {
-    data: data
-  }
-    const [providers, setProviders] = useState([]);
-    const [authUser,setAuthUser] = useState('');
-    const navigate = useNavigate()
-    const getProviders = async () => {  
-        const res = await axios.get('http://jahirlarico.enarequipa.org:8000//proveedoresByUser?idCliente=1');
-        setProviders(res.data);
-    }
-    useEffect(() => {
-        if (authUser) {
-            getProviders();
-        }
-      }, [authUser]);
-      useEffect(() => {
-        const token = Verificacion.getToken()
-        if (!token) {
-          return navigate("/login")
-        }
-        else{
-          axios.get("http://jahirlarico.enarequipa.org:8000//usuarioDetail?nombreUsuario=admin")
-          .then(res => {
-            setAuthUser(res.data.id);
-          })
-        }
-      },[])
-    return (
-        <div>
-            <div className="table-responsive">
-                <button onClick={logout}> Cerrar sesion</button>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Nombre del proveedor</th>
-                    <th>Empresa del proveedor</th>
-                    <th>DNI del proveedor</th>
-                    <th>Telefono del proveedor</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {providers.map((provider)=>(
-                    <tr key={provider.id}>
-                        <td>{provider.nombre}</td>
-                        <td>{provider.empresa}</td>
-                        <td>{provider.dni}</td>
-                        <td>{provider.telefono}</td>
-                        <td>
-                          <Button variant="primary">Editar</Button>
-                          <Button variant="danger">Eliminar</Button>
-                        </td>
-                      </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-        </div>
-      )
-}
-*/
-
-
 class App extends React.Component {
 
   state = {
@@ -94,8 +18,7 @@ class App extends React.Component {
   }
 
   peticionGet=()=>{
-    /*axios.get("http://jahirlarico.enarequipa.org:8000//proveedoresByUser?idCliente=1")*/
-    axios.get("http://localhost:8000/discoteca/"+this.state.discoteca+"/clientes")
+    axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes")
     .then(res => {
       this.setState({data:res.data});
     })
@@ -106,7 +29,7 @@ class App extends React.Component {
 
   eliminarCliente=(dni)=>{
     alert("Se eliminara el cliente con id: "+dni);
-    axios.delete("http://localhost:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
+    axios.delete("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
     .then(res => {
       this.peticionGet();
     })
@@ -124,13 +47,16 @@ class App extends React.Component {
   }
 
   clientesActivos=()=>{
-    axios.get("http://localhost:8000/discoteca/"+this.state.discoteca+"/clientesActivos")
+    axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientesActivos")
     .then(res => {
       if (res.data.length>1){
         alert("Hay "+res.data.length+" clientes activos");
       }
-      else{
+      else if (res.data.length===1){
         alert("Hay 1 cliente activo");
+      }
+      else{
+        alert("No hay clientes activos");
       }
     })
   }
@@ -145,8 +71,8 @@ class App extends React.Component {
   }
 
   activar = (dni) => {
-    axios.post("http://localhost:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni+"/historial")
-    axios.get("http://localhost:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
+    axios.post("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni+"/historial")
+    axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
     .then(data => {
       const cambio = {
         nombre: data.data.nombre,
@@ -154,7 +80,7 @@ class App extends React.Component {
         edad : data.data.edad,
         estado : true
       }
-      axios.put("http://localhost:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni,cambio)
+      axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni,cambio)
       .then( res=> {
         this.peticionGet();
       })
@@ -169,8 +95,8 @@ class App extends React.Component {
       fechaSalida : fechaActual,
       horaSalida : hora
     }
-    axios.put("http://localhost:8000/discoteca/"+this.state.discoteca +"/clientes/"+dni+"/historial/ultimo",data)
-    axios.get("http://localhost:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
+    axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca +"/clientes/"+dni+"/historial/ultimo",data)
+    axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
     .then(data => {
       const desactivar ={
         nombre: data.data.nombre,
@@ -178,7 +104,7 @@ class App extends React.Component {
         edad : data.data.edad,
         estado : false
       }
-      axios.put("http://localhost:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni,desactivar)
+      axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni,desactivar)
       .then (res => {
         this.peticionGet();
       })
