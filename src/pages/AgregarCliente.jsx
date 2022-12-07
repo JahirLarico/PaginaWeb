@@ -23,14 +23,11 @@ class AgregarCliente extends React.Component{
                 this.setState({nombre: data.data.nombre});
                 this.setState({edad: data.data.edad});
                 this.setState({dni: data.data.dni});
-                console.log(data);
             })
-            
         }
-    
     }
 
-    añadirCliente =(e)=>{
+    añadirCliente = async(e)=>{
         e.preventDefault();
         const data = {
             nombre: this.state.nombre,
@@ -38,9 +35,8 @@ class AgregarCliente extends React.Component{
             edad: this.state.edad
             
         }
-        axios.post('http://jahirlarico.enarequipa.org:8000/discoteca/'+this.state.discoteca +'/clientes', data)
+        await axios.post('http://jahirlarico.enarequipa.org:8000/discoteca/'+this.state.discoteca +'/clientes', data)
         .then(res =>{
-            console.log(data)
             window.location.href = "/";
         })
         .catch(error => {
@@ -51,7 +47,7 @@ class AgregarCliente extends React.Component{
 
     }
 
-    editarCliente =(e)=>{
+    editarCliente = async(e)=>{
         e.preventDefault();
         const data = {
             nombre: this.state.nombre,
@@ -59,9 +55,8 @@ class AgregarCliente extends React.Component{
             edad: this.state.edad
             
         }
-        axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+this.state.dniCliente, data)
+        await axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+this.state.dniCliente, data)
         window.location.href = '/'
-        
     }
     
     validarEdad = (edad) =>{
@@ -177,8 +172,8 @@ class AgregarCliente extends React.Component{
                                                     {this.state.dniMessage && <p className="text-primary">{this.state.dniMessage}</p>}
                                                 </div>
                                                 <div style={{ justifyContent:'center',textAlign:'center', alignItems:'center', display:'flex'}}>
-                                                    {(this.state.edadMessage || this.state.dniMessage) && (<input type="submit" disabled={true} className="btn btn-primary" value="Editar Cliente"/>)}
-                                                    {(!this.state.edadMessage && !this.state.dniMessage) && (<input type="submit" className="btn btn-primary" value="Editar Cliente"/>)}
+                                                    {(this.state.edadMessage || this.state.dniMessage) && (<input type="submit" disabled={true} className="btn btn-primary" value="Guardar"/>)}
+                                                    {(!this.state.edadMessage && !this.state.dniMessage) && (<input type="submit" className="btn btn-primary" value="Guardar"/>)}
                                                 </div>
                                             </form>
                                         </div>

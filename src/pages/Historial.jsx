@@ -15,8 +15,8 @@ class Historial extends React.Component{
         nombreDisco : localStorage.getItem('discoteca'),
         errorMessage : ''
     }
-    buscar = () => {
-        axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.nombreDisco+"/clientes/"+this.state.dniBuscado+"/historial")
+    buscar = async () => {
+        await axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.nombreDisco+"/clientes/"+this.state.dniBuscado+"/historial")
         .then(res => {
             this.setState({data:res.data});
             this.setState({ dniBuscado : ''});

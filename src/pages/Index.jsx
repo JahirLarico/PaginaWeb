@@ -27,9 +27,9 @@ class App extends React.Component {
     }, 1000)
   }
 
-  eliminarCliente=(dni)=>{
+  eliminarCliente= async(dni)=>{
     alert("Se eliminara el cliente con id: "+dni);
-    axios.delete("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
+    await axios.delete("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
     .then(res => {
       this.peticionGet();
     })
@@ -46,8 +46,8 @@ class App extends React.Component {
     window.location.href = "/agregarCliente";
   }
 
-  clientesActivos=()=>{
-    axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientesActivos")
+  clientesActivos= async ()=>{
+    await axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientesActivos")
     .then(res => {
       if (res.data.length>1){
         alert("Hay "+res.data.length+" clientes activos");
@@ -70,9 +70,9 @@ class App extends React.Component {
     window.location.href = "/historial";
   }
 
-  activar = (dni) => {
-    axios.post("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni+"/historial")
-    axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
+  activar = async (dni) => {
+    await axios.post("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni+"/historial")
+    await axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
     .then(data => {
       const cambio = {
         nombre: data.data.nombre,
@@ -87,7 +87,7 @@ class App extends React.Component {
     })
   }
 
-  desactivar = (dni) => {
+  desactivar = async(dni) => {
     let fecha = new Date();
     let hora = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
     let fechaActual = fecha.getFullYear() + "-" + fecha.getMonth() + "-" + fecha.getDate();
@@ -95,8 +95,8 @@ class App extends React.Component {
       fechaSalida : fechaActual,
       horaSalida : hora
     }
-    axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca +"/clientes/"+dni+"/historial/ultimo",data)
-    axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
+    await axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca +"/clientes/"+dni+"/historial/ultimo",data)
+    await axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
     .then(data => {
       const desactivar ={
         nombre: data.data.nombre,

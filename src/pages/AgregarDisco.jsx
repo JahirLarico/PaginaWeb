@@ -28,7 +28,7 @@ class AgregarDisco extends React.Component{
             this.setState({passwordMessage: 'La contraseña debe comenzar con una mayuscula , tener almenos un numero y no tener espacios'});
         }
     }
-
+/*
     agregarDiscoteca = (e) => {
         e.preventDefault();
         const data = {
@@ -37,7 +37,7 @@ class AgregarDisco extends React.Component{
             password: this.state.password
         }
         axios.post("http://jahirlarico.enarequipa.org:8000/discoteca", data)
-        .then((res) => {
+        .then(() => {
           
             const seguridad = {
                 username: res.data.username,
@@ -48,7 +48,25 @@ class AgregarDisco extends React.Component{
             window.location.href = "/login";
         })
     }
-
+ */
+    agregarDiscoteca = async (e) => {
+        e.preventDefault();
+        const data = {
+            username: this.state.nombreDisco,
+            UbicacionDiscoteca: this.state.ubicacionDisco,
+            password: this.state.password
+        }
+        await axios.post('http://jahirlarico.enarequipa.org:8000/discoteca', data)
+        .then((res) =>{
+            const seguridad = {
+                username: res.data.username,
+                UbicacionDiscoteca: res.data.UbicacionDiscoteca,
+                password: res.data.password,
+            }
+            axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+ this.state.nombreDisco, seguridad)
+        })   
+    }
+ 
     render(){
         return(
             <div id="layoutAuthentication">
