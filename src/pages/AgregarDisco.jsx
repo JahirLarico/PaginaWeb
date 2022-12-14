@@ -11,12 +11,12 @@ class AgregarDisco extends React.Component{
 
     }
     validarNombre = (nombre) => {
-        if(/^([A-Z]).[\w_]*$/.test(nombre)){
+        if(/^([A-Z])[\w_]*$/.test(nombre)){
             this.setState({nombreDisco : nombre})
             this.setState({nombreMessage: ''});
         }
         else{
-            this.setState({nombreMessage: 'El nombre debe comenzar con una mayuscula'});
+            this.setState({nombreMessage: 'El nombre debe comenzar con una mayuscula y no contener espacios '});
         }
     }
     validadContrasena = (contrasena) => {
@@ -64,6 +64,8 @@ class AgregarDisco extends React.Component{
                 password: res.data.password,
             }
             axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+ this.state.nombreDisco, seguridad)
+            alert("Discoteca agregada con exito")
+            window.location.href = "/login";
         })   
     }
  
