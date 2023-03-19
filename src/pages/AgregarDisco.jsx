@@ -1,5 +1,8 @@
 import React from "react";
 import axios from "axios";
+
+import urls from "../urls/urls";
+
 class AgregarDisco extends React.Component{
 
     state = {
@@ -7,7 +10,8 @@ class AgregarDisco extends React.Component{
         ubicacionDisco: '',
         password: '',
         nombreMessage: '',
-        passwordMessage: ''
+        passwordMessage: '',
+        url : urls.getApiUrl()
 
     }
     validarNombre = (nombre) => {
@@ -56,14 +60,14 @@ class AgregarDisco extends React.Component{
             UbicacionDiscoteca: this.state.ubicacionDisco,
             password: this.state.password
         }
-        await axios.post('http://jahirlarico.enarequipa.org:8000/discoteca', data)
+        await axios.post(this.state.url+"/discoteca", data)
         .then((res) =>{
             const seguridad = {
                 username: res.data.username,
                 UbicacionDiscoteca: res.data.UbicacionDiscoteca,
                 password: res.data.password,
             }
-            axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+ this.state.nombreDisco, seguridad)
+            axios.put(this.state.url+"/discoteca/"+ this.state.nombreDisco, seguridad)
             alert("Discoteca agregada con exito")
             window.location.href = "/login";
         })   

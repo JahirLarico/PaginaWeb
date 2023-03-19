@@ -7,16 +7,20 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Table from 'react-bootstrap/Table';
+
+import urls from "../urls/urls";
+
 class Historial extends React.Component{
 
     state = {
         data : '',
         dniBuscado : '',
         nombreDisco : localStorage.getItem('discoteca'),
-        errorMessage : ''
+        errorMessage : '',
+        url: urls.getApiUrl()
     }
     buscar = async () => {
-        await axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.nombreDisco+"/clientes/"+this.state.dniBuscado+"/historial")
+        await axios.get(this.state.url+"/discoteca/"+this.state.nombreDisco+"/clientes/"+this.state.dniBuscado+"/historial")
         .then(res => {
             this.setState({data:res.data});
             this.setState({ dniBuscado : ''});

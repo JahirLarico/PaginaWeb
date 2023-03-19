@@ -8,28 +8,29 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Table from 'react-bootstrap/Table';
 
+import urls from '../urls/urls';
+
 class App extends React.Component {
 
   state = {
     data: [],
     loading: true,
     discoteca: '',
-    total : 0
+    total : 0,
+    url : urls.getApiUrl()
   }
 
   peticionGet=()=>{
-    axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes")
+    axios.get(this.state.url+"/discoteca/"+this.state.discoteca+"/clientes")
     .then(res => {
       this.setState({data:res.data});
     })
-    setTimeout(()=>{
-      this.setState({loading:false});
-    }, 1000)
+    console.log("algo")
   }
 
   eliminarCliente= async(dni)=>{
     alert("Se eliminara el cliente con id: "+dni);
-    await axios.delete("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
+    await axios.delete(this.state.url+"/discoteca/"+this.state.discoteca+"/clientes/"+dni)
     .then(res => {
       this.peticionGet();
     })
@@ -47,7 +48,7 @@ class App extends React.Component {
   }
 
   clientesActivos= async ()=>{
-    await axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientesActivos")
+    await axios.get(this.state.url+"/discoteca/"+this.state.discoteca+"/clientesActivos")
     .then(res => {
       if (res.data.length>1){
         alert("Hay "+res.data.length+" clientes activos");
@@ -71,8 +72,8 @@ class App extends React.Component {
   }
 
   activar = async (dni) => {
-    await axios.post("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni+"/historial")
-    await axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
+    await axios.post(this.state.url+"/discoteca/"+this.state.discoteca+"/clientes/"+dni+"/historial")
+    await axios.get(this.state.url+"/discoteca/"+this.state.discoteca+"/clientes/"+dni)
     .then(data => {
       const cambio = {
         nombre: data.data.nombre,
@@ -80,7 +81,7 @@ class App extends React.Component {
         edad : data.data.edad,
         estado : true
       }
-      axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni,cambio)
+      axios.put(this.state.url+"/discoteca/"+this.state.discoteca+"/clientes/"+dni,cambio)
       .then( res=> {
         this.peticionGet();
       })
@@ -95,8 +96,8 @@ class App extends React.Component {
       fechaSalida : fechaActual,
       horaSalida : hora
     }
-    await axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca +"/clientes/"+dni+"/historial/ultimo",data)
-    await axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni)
+    await axios.put(this.state.url+"/discoteca/"+this.state.discoteca +"/clientes/"+dni+"/historial/ultimo",data)
+    await axios.get(this.state.url+"/discoteca/"+this.state.discoteca+"/clientes/"+dni)
     .then(data => {
       const desactivar ={
         nombre: data.data.nombre,
@@ -104,7 +105,7 @@ class App extends React.Component {
         edad : data.data.edad,
         estado : false
       }
-      axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+dni,desactivar)
+      axios.put(this.state.url+"/discoteca/"+this.state.discoteca+"/clientes/"+dni,desactivar)
       .then (res => {
         this.peticionGet();
       })
@@ -123,14 +124,14 @@ class App extends React.Component {
   render(){
     return (
       <div>
-        {this.state.loading && (<div style={{display: 'flex', justifyContent: 'center', height: '100vh', alignContent:'center', flexDirection: 'column' }}>
+        {!this.state.loading && (<div style={{display: 'flex', justifyContent: 'center', height: '100vh', alignContent:'center', flexDirection: 'column' }}>
           <div style={{textAlign: 'center'}}>
             <img src="/loading.svg" alt='Imagen de carga' style={{margin : "auto"}}></img>
             <h1>Cargando...</h1>
           </div>
         </div>)  }
           {
-            !this.state.loading && (
+            this.state.loading && (
             <div className="table-responsive">
               <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                 <Container>
@@ -151,6 +152,7 @@ class App extends React.Component {
             <Table striped>
               <thead>
                 <tr>
+                  <th>Imagen del cliente</th>
                   <th>Nombre del cliente</th>
                   <th>DNI del cliente</th>
                   <th>Edad del cliente</th>
@@ -161,6 +163,7 @@ class App extends React.Component {
               <tbody>
               {this.state.data.map((cliente)=>(
                     <tr key={cliente.id}>
+                        <td style={{display: 'flex', justifyContent: 'center' }}><img src={this.state.url+cliente.userFoto} alt="Imagen del cliente" style={{width: '50px', height: '50px'}}></img></td>
                         <td>{cliente.nombre}</td>
                         <td>{cliente.dni}</td>
                         <td>{cliente.edad}</td>

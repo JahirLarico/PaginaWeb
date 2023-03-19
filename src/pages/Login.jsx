@@ -1,7 +1,7 @@
 import Verificacion from "../jwt/Verificacion";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
-
+import urls from "../urls/urls";
 class Login extends React.Component{
 
     state = {
@@ -10,6 +10,7 @@ class Login extends React.Component{
         message: '',
         userMessage: '',
         passwordMessage: '',
+        url : urls.getApiUrl()
     }
     login = (e) => {
         e.preventDefault();

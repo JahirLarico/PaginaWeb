@@ -1,6 +1,8 @@
 import axios from "axios";
 import React from "react";
 
+import urls from "../urls/urls";
+
 class AgregarCliente extends React.Component{
     
     state = {
@@ -10,15 +12,17 @@ class AgregarCliente extends React.Component{
         nombre: '',
         edad : '',
         dni : '',
+        userFoto : '',
         edadMessage: '',
         dniMessage: '',
         horaActual: '',
         fechaActual: '',
+        url : urls.getApiUrl()
     }
 
     componentDidMount(){
         if (this.state.tipo === 'editar'){
-            axios.get("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+this.state.dniCliente)
+            axios.get(this.state.url+"/discoteca/"+this.state.discoteca+"/clientes/"+this.state.dniCliente)
             .then(data =>{
                 this.setState({nombre: data.data.nombre});
                 this.setState({edad: data.data.edad});
@@ -32,12 +36,12 @@ class AgregarCliente extends React.Component{
         const data = {
             nombre: this.state.nombre,
             dni: this.state.dni,
-            edad: this.state.edad
-            
+            edad: this.state.edad,
+            userFoto: this.state.userFoto
         }
-        await axios.post('http://jahirlarico.enarequipa.org:8000/discoteca/'+this.state.discoteca +'/clientes', data)
+        await axios.post(this.state.url+"/discoteca/"+this.state.discoteca +"/clientes", data)
         .then(res =>{
-            window.location.href = "/";
+            console.log(data);
         })
         .catch(error => {
             alert('Ese DNI ya se se enceuntra en uso')
@@ -55,7 +59,7 @@ class AgregarCliente extends React.Component{
             edad: this.state.edad
             
         }
-        await axios.put("http://jahirlarico.enarequipa.org:8000/discoteca/"+this.state.discoteca+"/clientes/"+this.state.dniCliente, data)
+        await axios.put(this.state.url+"/discoteca/"+this.state.discoteca+"/clientes/"+this.state.dniCliente, data)
         window.location.href = '/'
     }
     
@@ -126,8 +130,15 @@ class AgregarCliente extends React.Component{
                                                     <label >DNI del cliente</label>
                                                     {this.state.dniMessage && <p className="text-primary">{this.state.dniMessage}</p>}
                                                 </div>
+                                                <div className="form-floating mb-3">
+                                                    <input className="form-control"
+                                                    type="file"
+                                                    //value = {this.state.dni} onChange={(e)=>this.setState({dni: e.target.value})}
+                                                    onChange={(e)=>this.setState({userFoto: e.target.value})}
+                                                    />
+                                                    <label>Foto del cliente</label>
+                                                </div>
                                                 <div style={{ justifyContent:'center',textAlign:'center', alignItems:'center', display:'flex'}}>
-                                            
                                                     {(!this.state.dniMessage && !this.state.edadMessage) && (<input type="submit" className="btn btn-primary" value="Agregar Cliente"/>)}
                                                     {(this.state.dniMessage || this.state.edadMessage) && (<input type="submit" disabled={true} className="btn btn-primary" value="Agregar Cliente"/>)}
                                                 </div>
